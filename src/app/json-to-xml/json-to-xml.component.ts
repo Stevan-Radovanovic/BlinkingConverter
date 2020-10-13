@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { toXML } from 'jstoxml';
 
 @Component({
   selector: 'app-json-to-xml',
