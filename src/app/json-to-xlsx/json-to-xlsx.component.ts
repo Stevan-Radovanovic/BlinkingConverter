@@ -17,8 +17,9 @@ export class JsonToXlsxComponent implements OnInit {
     return flattenedItems;
   }
 
-  onClickConvertXlsx() {
-    const flattenedArray = this.flatten(this.mockData.items);
+  onClickConvertXlsx(array: Object[]) {
+    console.log(array);
+    const flattenedArray = this.flatten(array);
 
     const settings = {
       sheetName: 'Blinking JSON',
@@ -26,22 +27,21 @@ export class JsonToXlsxComponent implements OnInit {
       extraLength: 3,
       writeOptions: {},
     };
-    xlsx(this.mockData.xslxHeaders, flattenedArray, settings, true);
+    xlsx(this.createHeaders(flattenedArray[0]), flattenedArray, settings, true);
   }
 
   ngOnInit(): void {}
 
-  mockData = {
-    xslxHeaders: [
-      { label: 'Phone Model', value: 'model' },
-      { label: 'Chargers', value: 'chargers' },
-      { label: 'Cases', value: 'cases' },
-      { label: 'Earphones', value: 'earphones' },
-      { label: 'Scratched', value: 'scratched' },
-      { label: 'Serial Number', value: 'config.serialNo' },
-      { label: 'Barcode', value: 'config.barcode' },
-    ],
+  createHeaders(obj: Object) {
+    const headers = [];
+    for (const key in obj) {
+      headers.push({ label: key, value: key });
+    }
+    console.log(headers);
+    return headers;
+  }
 
+  mockData = {
     items: [
       {
         model: 'Samsung S7',

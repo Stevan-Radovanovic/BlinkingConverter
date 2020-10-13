@@ -9,9 +9,13 @@ import * as flat from 'flat';
 export class JsonToCsvComponent implements OnInit {
   constructor() {}
 
-  onClickConvertCsv() {
-    const flattenedArray = this.flatten(this.mockData.items);
-    this.exportCSVFile(this.mockData.headers, flattenedArray, 'Blinking');
+  onClickConvertCsv(array: Object[]) {
+    const flattenedArray = this.flatten(array);
+    this.exportCSVFile(
+      this.createHeaders(flattenedArray[0]),
+      flattenedArray,
+      'Blinking'
+    );
   }
 
   convertToCSV(objArray) {
@@ -64,6 +68,15 @@ export class JsonToCsvComponent implements OnInit {
       return flat(item);
     });
     return flattenedItems;
+  }
+
+  createHeaders(obj: Object) {
+    const headers = {};
+    for (const key in obj) {
+      headers[key] = key;
+    }
+
+    return headers;
   }
 
   mockData = {
