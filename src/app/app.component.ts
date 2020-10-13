@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import * as flat from 'flat';
 import * as xlsx from 'json-as-xlsx';
+import { toXML } from 'jstoxml';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,11 @@ export class AppComponent {
   onClickConvertCsv() {
     const flattenedArray = this.flatten(this.mockData.items);
     this.exportCSVFile(this.mockData.headers, flattenedArray, 'Blinking');
+  }
+
+  onClickConvertXml() {
+    const xml = toXML(this.mockData.items);
+    console.dirxml(xml);
   }
 
   onClickConvertXlsx() {
