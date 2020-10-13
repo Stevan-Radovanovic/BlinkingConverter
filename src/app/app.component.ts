@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import * as flat from 'flat';
+import * as xlsx from 'json-as-xlsx';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,19 @@ export class AppComponent {
 
   onClickConvertCsv() {
     const flattenedArray = this.flatten(this.mockData.items);
-    this.exportCSVFile(this.mockData.headers, flattenedArray, 'JSONtoCSV');
+    this.exportCSVFile(this.mockData.headers, flattenedArray, 'Blinking');
+  }
+
+  onClickConvertXlsx() {
+    const flattenedArray = this.flatten(this.mockData.items);
+
+    const settings = {
+      sheetName: 'Blinking JSON',
+      fileName: 'Blinking',
+      extraLength: 3,
+      writeOptions: {},
+    };
+    xlsx(this.mockData.xslxHeaders, flattenedArray, settings, true);
   }
 
   flatten(items: Object[]) {
@@ -69,6 +82,16 @@ export class AppComponent {
   }
 
   mockData = {
+    xslxHeaders: [
+      { label: 'Phone Model', value: 'model' },
+      { label: 'Chargers', value: 'chargers' },
+      { label: 'Cases', value: 'cases' },
+      { label: 'Earphones', value: 'earphones' },
+      { label: 'Scratched', value: 'scratched' },
+      { label: 'Serial Number', value: 'config.serialNo' },
+      { label: 'Barcode', value: 'config.barcode' },
+    ],
+
     headers: {
       model: 'Phone Model',
       chargers: 'Chargers',
