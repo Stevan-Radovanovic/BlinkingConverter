@@ -15,7 +15,17 @@ export class JsonToPdfComponent implements OnInit {
     let doc = new jsPDF();
     const rows = this.flatten(array);
     let col = this.createHeaders(rows[0]);
-    autoTable(doc, { columns: col, body: this.convertObjectsToArrays(rows) });
+    autoTable(doc, {
+      columns: col,
+      body: this.convertObjectsToArrays(rows),
+      headStyles: {
+        fillColor: '#ff2a4e',
+        textColor: '#141414',
+      },
+      bodyStyles: {
+        textColor: '#141414',
+      },
+    });
     doc.save('Blinking.pdf');
   }
 
