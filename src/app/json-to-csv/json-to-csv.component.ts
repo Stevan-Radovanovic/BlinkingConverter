@@ -7,77 +7,6 @@ import * as flat from 'flat';
   styleUrls: ['./json-to-csv.component.css'],
 })
 export class JsonToCsvComponent implements OnInit {
-  constructor() {}
-
-  onClickConvertCsv(array: Object[]) {
-    const flattenedArray = this.flatten(array);
-    this.exportCSVFile(
-      this.createHeaders(flattenedArray[0]),
-      flattenedArray,
-      'Blinking'
-    );
-  }
-
-  convertToCSV(objArray) {
-    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-    var str = '';
-
-    for (let i = 0; i < array.length; i++) {
-      var line = '';
-      for (const index in array[i]) {
-        if (line != '') line += ',';
-
-        line += array[i][index];
-      }
-
-      str += line + '\r\n';
-    }
-
-    return str;
-  }
-
-  exportCSVFile(headers, items, fileTitle) {
-    if (headers) {
-      items.unshift(headers);
-    }
-
-    const jsonObject = JSON.stringify(items);
-    const csv = this.convertToCSV(jsonObject);
-
-    const exportedFilename = fileTitle + '.csv' || 'export.csv';
-
-    let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    if (navigator.msSaveBlob) {
-      navigator.msSaveBlob(blob, exportedFilename);
-    } else {
-      let link = document.createElement('a');
-      if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', exportedFilename);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    }
-  }
-
-  flatten(items: Object[]) {
-    const flattenedItems = items.map((item) => {
-      return flat(item);
-    });
-    return flattenedItems;
-  }
-
-  createHeaders(obj: Object) {
-    const headers = {};
-    for (const key in obj) {
-      headers[key] = key;
-    }
-
-    return headers;
-  }
 
   mockData = {
     headers: {
@@ -127,5 +56,88 @@ export class JsonToCsvComponent implements OnInit {
     ],
   };
 
+  constructor() {}
+
   ngOnInit(): void {}
+
+  onClickConvertCsv(): void {
+    const flattenedArray = this.flatten(this.mockData.items);
+    console.log(flattenedArray);
+    this.exportCSVFile(
+      this.createHeaders(flattenedArray[0]),
+      flattenedArray,
+      'Blinking'
+    );
+  }
+
+  convertToCSV(objArray): string {
+    const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
+    let str = '';
+
+
+    for (const arr of array) {
+      if (arr) {
+        let line = '';
+        console.log(arr);
+        for (const i in arr) {
+          if (arr.hasOwnProperty(i)) {
+            if (line !== '') {
+              line += ',';
+            }
+
+            line += arr[i];
+          }
+        }
+
+        str += line + '\r\n';
+      }
+    }
+
+    return str;
+  }
+
+  exportCSVFile(headers, items, fileTitle): void {
+    if (headers) {
+      items.unshift(headers);
+    }
+
+    const jsonObject = JSON.stringify(items);
+    const csv = this.convertToCSV(jsonObject);
+
+    const exportedFilename = fileTitle + '.csv' || 'export.csv';
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    if (navigator.msSaveBlob) {
+      navigator.msSaveBlob(blob, exportedFilename);
+    } else {
+      const link = document.createElement('a');
+      if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', exportedFilename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  }
+
+  flatten(items: object[]): object[] {
+    console.log(items);
+    return items.map((item) => {
+      return flat(item);
+    });
+  }
+
+  createHeaders(obj: object): object {
+    const headers = {};
+    for (const key in obj) {
+      if (key) {
+        headers[key] = key;
+      }
+    }
+
+    return headers;
+  }
 }

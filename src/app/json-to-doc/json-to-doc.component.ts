@@ -9,48 +9,6 @@ import * as flat from 'flat';
   styleUrls: ['./json-to-doc.component.css'],
 })
 export class JsonToDocComponent implements OnInit {
-  onClickConvertDoc(array: Object[]) {
-    let doc = new jsPDF();
-    const rows = this.flatten(array);
-    let col = this.createHeaders(rows[0]);
-    autoTable(doc, {
-      columns: col,
-      body: this.convertObjectsToArrays(rows),
-      headStyles: {
-        fillColor: '#ff2a4e',
-        textColor: '#141414',
-      },
-      bodyStyles: {
-        textColor: '#141414',
-      },
-    });
-    doc.save('Blinking.doc');
-  }
-
-  flatten(items: Object[]) {
-    const flattenedItems = items.map((item) => {
-      return flat(item);
-    });
-    return flattenedItems;
-  }
-
-  convertObjectsToArrays(array: Object[]) {
-    let converted = array.map((elem) => {
-      return Object.values(elem);
-    });
-    return converted;
-  }
-
-  createHeaders(obj: Object) {
-    const headers = [];
-    for (const key in obj) {
-      headers.push(key);
-    }
-    console.log(headers);
-    return headers;
-  }
-
-  ngOnInit(): void {}
 
   mockData = {
     items: [
@@ -89,4 +47,46 @@ export class JsonToDocComponent implements OnInit {
       },
     ],
   };
+
+  ngOnInit(): void {}
+
+  onClickConvertDoc(): void {
+    const doc = new jsPDF();
+    const rows = this.flatten(this.mockData.items);
+    const col = this.createHeaders(rows[0]);
+    autoTable(doc, {
+      columns: col,
+      body: this.convertObjectsToArrays(rows),
+      headStyles: {
+        fillColor: '#ff2a4e',
+        textColor: '#141414',
+      },
+      bodyStyles: {
+        textColor: '#141414',
+      },
+    });
+    doc.save('Blinking.doc');
+  }
+
+  flatten(items: object[]): any {
+    return items.map((item) => {
+      return flat(item);
+    });
+  }
+
+  convertObjectsToArrays(array: object[]): any {
+    return array.map((elem) => {
+      return Object.values(elem);
+    });
+  }
+
+  createHeaders(obj: object): any {
+    const headers = [];
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        headers.push(key);
+      }
+    }
+    return headers;
+  }
 }

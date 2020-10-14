@@ -8,39 +8,6 @@ import * as xlsx from 'json-as-xlsx';
   styleUrls: ['./json-to-xlsx.component.css'],
 })
 export class JsonToXlsxComponent implements OnInit {
-  constructor() {}
-
-  flatten(items: Object[]) {
-    const flattenedItems = items.map((item) => {
-      return flat(item);
-    });
-    return flattenedItems;
-  }
-
-  onClickConvertXlsx(array: Object[]) {
-    console.log(array);
-    const flattenedArray = this.flatten(array);
-
-    const settings = {
-      sheetName: 'Blinking JSON',
-      fileName: 'Blinking',
-      extraLength: 3,
-      writeOptions: {},
-    };
-    xlsx(this.createHeaders(flattenedArray[0]), flattenedArray, settings, true);
-  }
-
-  ngOnInit(): void {}
-
-  createHeaders(obj: Object) {
-    const headers = [];
-    for (const key in obj) {
-      headers.push({ label: key, value: key });
-    }
-    console.log(headers);
-    return headers;
-  }
-
   mockData = {
     items: [
       {
@@ -78,4 +45,35 @@ export class JsonToXlsxComponent implements OnInit {
       },
     ],
   };
+  constructor() {}
+
+  flatten(items: object[]): object[] {
+    return items.map((item) => {
+      return flat(item);
+    });
+  }
+
+  onClickConvertXlsx(): void {
+    const flattenedArray = this.flatten(this.mockData.items);
+
+    const settings = {
+      sheetName: 'Blinking JSON',
+      fileName: 'Blinking',
+      extraLength: 3,
+      writeOptions: {},
+    };
+    xlsx(this.createHeaders(flattenedArray[0]), flattenedArray, settings, true);
+  }
+
+  ngOnInit(): void {}
+
+  createHeaders(obj: object): object {
+    const headers = [];
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        headers.push({ label: key, value: key });
+      }
+    }
+    return headers;
+  }
 }
