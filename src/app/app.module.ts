@@ -8,6 +8,7 @@ import { JsonToCsvComponent } from './json-to-csv/json-to-csv.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JsonToPdfComponent } from './json-to-pdf/json-to-pdf.component';
 import { LogoComponent } from './logo/logo.component';
+import { JsonToDocComponent } from './json-to-doc/json-to-doc.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { LogoComponent } from './logo/logo.component';
     JsonToCsvComponent,
     JsonToPdfComponent,
     LogoComponent,
+    JsonToDocComponent,
   ],
   imports: [BrowserModule, HttpClientModule],
   providers: [],
